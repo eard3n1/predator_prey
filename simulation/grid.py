@@ -27,8 +27,8 @@ class Grid:
     def get_entities_at(self, x, y):
         return self.cells[y][x]
 
-    def local_prey_count(self, x, y):
+    def local_count(self, x, y):
         count = 0
         for nx, ny in self.get_adjacent_positions(x, y) + [(x, y)]:
-            count += sum(1 for e in self.cells[ny][nx] if e.__class__.__name__ == "Prey")
+            count += sum(1 for e in self.cells[ny][nx] if e.__class__.__name__ == "Prey" or e.__class__.__name__ == "Predator")
         return count

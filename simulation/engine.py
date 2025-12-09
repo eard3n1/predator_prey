@@ -30,14 +30,15 @@ class Simulation:
             new_x, new_y = random.choice(adj)
             self.grid.move_entity(prey, new_x, new_y)
 
-            if self.grid.local_prey_count(prey.x, prey.y) <= config.CARRYING_CAPACITY:
-                if random.random() <= config.PREY_REPRODUCE:
+            local_prey_count = self.grid.local_count(prey.x, prey.y)
+            if local_prey_count <= config.CARRYING_CAPACITY:
+                if config.PREY_REPRODUCE >= random.random():
                     new_prey = Prey(prey.x, prey.y)
                     self.prey_list.append(new_prey)
                     self.grid.add_entity(new_prey)
-
-            local_prey_count = self.grid.local_prey_count(prey.x, prey.y)
-            if local_prey_count >= config.CARRYING_CAPACITY - 1:
+                    prey.food_scarcity += 0.5
+            
+            if local_prey_count >= (config.CARRYING_CAPACITY - 1):
                 prey.food_scarcity += 1
             elif local_prey_count <= 1:
                 prey.food_scarcity = max(-2, prey.food_scarcity - 1)
@@ -57,18 +58,21 @@ class Simulation:
                 self.grid.move_entity(predator, target.x, target.y)
                 self.prey_list.remove(target)
                 self.grid.cells[target.y][target.x].remove(target)
-                predator.starve_time = max(-2, predator.starve_time - 1)
+                predator.starve_time = max((-2), predator.starve_time - 1)
             else:
                 new_x, new_y = random.choice(adj)
                 self.grid.move_entity(predator, new_x, new_y)
                 predator.starve_time += 1
 
-            if random.random() <= config.PREDATOR_REPRODUCE:
-                new_pred = Predator(predator.x, predator.y)
-                self.predator_list.append(new_pred)
-                self.grid.add_entity(new_pred)
+            local_predator_count = self.grid.local_count(predator.x, predator.y)   
+            if local_predator_count <= (config.CARRYING_CAPACITY - 1):
+                if config.PREDATOR_REPRODUCE >= random.random(): 
+                    new_pred = Predator(predator.x, predator.y)
+                    self.predator_list.append(new_pred)
+                    self.grid.add_entity(new_pred)
+                    predator.starve_time += 0.5
 
-            if predator.starve_time >= config.PREDATOR_STARVE:
+            if predator.starve_time >= (config.PREDATOR_STARVE - 1):
                 self.predator_list.remove(predator)
                 self.grid.cells[predator.y][predator.x].remove(predator)
 
