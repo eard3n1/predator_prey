@@ -1,16 +1,14 @@
-import random
+from random import randint
 
 class Entity:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.age = 0
+        self.hunger = randint(-2, 2) 
 
 class Prey(Entity):
-    def __init__(self, x, y):
-        super().__init__(x, y)
-        self.food_scarcity = random.randint(-2, 2)
+    pass
 
 class Predator(Entity):
-    def __init__(self, x, y):
-        super().__init__(x, y)
-        self.starve_time = random.randint(-2, 2)
+    pass

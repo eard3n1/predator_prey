@@ -7,12 +7,13 @@ let interval = null;
 
 function draw(state) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const cell = Math.floor(Math.min(canvas.width / GRID_SIZE, canvas.height / GRID_SIZE));
 
     for (let y = 0; y < GRID_SIZE; y++) {
         for (let x = 0; x < GRID_SIZE; x++) {
             if (state[y][x] === 1) ctx.fillStyle = "#4caf50"; // prey
             else if (state[y][x] === 2) ctx.fillStyle = "#f44336"; // predator
-            else ctx.fillStyle = "#111";
+            else ctx.fillStyle = "#111"; // empty
 
             ctx.fillRect(x * cell, y * cell, cell, cell);
         }
